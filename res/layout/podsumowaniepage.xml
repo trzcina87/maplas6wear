@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/podczas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="100px"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/podstart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/poddlugosc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/podstart"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30px"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/podczastrasy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/poddlugosc"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30px"
+        android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>
