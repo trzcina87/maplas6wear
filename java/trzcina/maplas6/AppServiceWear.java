@@ -33,10 +33,12 @@ import trzcina.maplas6.lokalizacjawear.GPXTrasaWear;
 import trzcina.maplas6.lokalizacjawear.PlikiGPXWear;
 import trzcina.maplas6.pomocwear.BitmapyWear;
 import trzcina.maplas6.pomocwear.KomunikatyWear;
+import trzcina.maplas6.pomocwear.PaintyWear;
 import trzcina.maplas6.pomocwear.PrzygotowanieWear;
 import trzcina.maplas6.pomocwear.RozneWear;
 import trzcina.maplas6.pomocwear.StaleWear;
 import trzcina.maplas6.pomocwear.WearWear;
+import trzcina.maplas6.pomocwear.WiadomoscWear;
 import trzcina.maplas6.watkiwear.CzasWatekWear;
 import trzcina.maplas6.watkiwear.KompasWatekWear;
 import trzcina.maplas6.watkiwear.RysujWatekWear;
@@ -105,6 +107,20 @@ public class AppServiceWear extends Service {
         }
     }
 
+    public void wyslijPunktDoTelefonu(String nazwa) {
+        WiadomoscWear wiadomosc = WearWear.wyslijWiadomoscICzekajNaOdpowiedz("POINT", nazwa.getBytes(), 3, 1000);
+        if(wiadomosc == null) {
+            MainActivityWear.activity.pokazToast("Brak połączenia z telefonem!");
+        } else {
+            String daneodpowiedz = new String(wiadomosc.dane);
+            if(daneodpowiedz.startsWith("TRUE")) {
+                MainActivityWear.activity.pokazToast("Zapisano: " + nazwa);
+            } else {
+                MainActivityWear.activity.pokazToast("Błąd zapisu na telefonie!");
+            }
+        }
+    }
+
     public void zmienKolorInfo() {
         if(kolorinfo == 0) {
             kolorinfo = 3;
@@ -146,11 +162,13 @@ public class AppServiceWear extends Service {
             @Override
             public void run() {
 
+                PaintyWear.inicjujPainty();
+
                 //Laczymy do API
                 MainActivityWear.activity.ustawProgressPrzygotowanie(1);
                 MainActivityWear.activity.ustawInfoPrzygotowanie("Lacze z telefonem...");
                 GoogleApiClient gac = WearWear.ustawApi();
-                if(gac == null) {
+                if(gac != null) {
 
                     MainActivityWear.activity.ustawProgressPrzygotowanie(2);
                     MainActivityWear.activity.ustawInfoPrzygotowanie("Pobieram pliki...");

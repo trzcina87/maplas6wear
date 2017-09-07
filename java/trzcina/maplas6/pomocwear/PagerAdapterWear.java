@@ -68,14 +68,15 @@ public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListen
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
+                MainActivityWear.activity.ustawCzasNaMapie();
                 break;
             case 1:
                 break;
             case 2:
-                MainActivityWear.activity.wypelnijPodsumowanie();
+                MainActivityWear.activity.wypelnijPodsumowanie(false);
                 break;
             case 3:
-                MainActivityWear.activity.pamiectextview.setText(RozneWear.pobierzPamiec());
+                MainActivityWear.activity.wypelnijPamiec();
                 break;
         }
     }

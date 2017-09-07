@@ -12,6 +12,7 @@ import trzcina.maplas6.AppServiceWear;
 import trzcina.maplas6.MainActivityWear;
 import trzcina.maplas6.pomocwear.RozneWear;
 
+@SuppressWarnings("PointlessBooleanExpression")
 public class KompasWatekWear extends Thread implements SensorEventListener {
 
     public volatile boolean zakoncz;    //Info czy zakonczyc
