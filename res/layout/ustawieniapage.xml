@@ -21,7 +21,13 @@
                 android:id="@+id/zakonczbutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
                 android:text="Zakończ" />
+
+            <TextView
+                android:id="@+id/pamiectextview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

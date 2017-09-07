@@ -7,6 +7,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,10 +22,13 @@ import java.nio.LongBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import trzcina.maplas6.atlasywear.AtlasWear;
 import trzcina.maplas6.atlasywear.AtlasyWear;
 import trzcina.maplas6.atlasywear.TmiParserWear;
+import trzcina.maplas6.lokalizacjawear.GPXPunktWear;
 import trzcina.maplas6.lokalizacjawear.GPXTrasaWear;
 import trzcina.maplas6.lokalizacjawear.PlikiGPXWear;
 import trzcina.maplas6.pomocwear.BitmapyWear;
@@ -41,7 +45,7 @@ import trzcina.maplas6.watkiwear.WczytajWatekWear;
 @SuppressWarnings("PointlessBooleanExpression")
 public class AppServiceWear extends Service {
 
-    public static AppServiceWear service;
+    public static volatile AppServiceWear service;
     private boolean wystartowany;                           //Czy serwis juz dziala
     public static volatile int widok = StaleWear.WIDOKBRAK;
     public List<String> listaplikowaplikacji;
@@ -58,9 +62,10 @@ public class AppServiceWear extends Service {
     public Point pixelnamapienadsrodkiem;
     public AtlasWear atlas;
     public TmiParserWear tmiparser;
-    public GPXTrasaWear obecnatrasa;
-    public List<GPXTrasaWear> obecnetrasy;
+    public volatile GPXTrasaWear obecnatrasa;
+    public volatile List<GPXTrasaWear> obecnetrasy;
     public int poziominfo;
+    public volatile boolean obecnatrasapobrana;
 
     public AppServiceWear() {
         service = this;
@@ -81,6 +86,7 @@ public class AppServiceWear extends Service {
         tmiparser = null;
         obecnatrasa = new GPXTrasaWear();
         poziominfo = 1;
+        obecnatrasapobrana = false;
         obecnetrasy = new ArrayList<>(20);
         obecnetrasy.add(obecnatrasa);
     }
@@ -97,6 +103,15 @@ public class AppServiceWear extends Service {
         } else {
             return null;
         }
+    }
+
+    public void zmienKolorInfo() {
+        if(kolorinfo == 0) {
+            kolorinfo = 3;
+        } else {
+            kolorinfo = 0;
+        }
+        rysujwatek.odswiez = true;
     }
 
     public void zacznijNowaTrase() {
@@ -135,7 +150,7 @@ public class AppServiceWear extends Service {
                 MainActivityWear.activity.ustawProgressPrzygotowanie(1);
                 MainActivityWear.activity.ustawInfoPrzygotowanie("Lacze z telefonem...");
                 GoogleApiClient gac = WearWear.ustawApi();
-                if(gac != null) {
+                if(gac == null) {
 
                     MainActivityWear.activity.ustawProgressPrzygotowanie(2);
                     MainActivityWear.activity.ustawInfoPrzygotowanie("Pobieram pliki...");
@@ -167,7 +182,12 @@ public class AppServiceWear extends Service {
                     MainActivityWear.activity.ustawInfoPrzygotowanie("Wczytuje pliki...");
                     PlikiGPXWear.szukajPlikow();
 
+                    MainActivityWear.activity.ustawProgressPrzygotowanie(8);
+                    MainActivityWear.activity.ustawInfoPrzygotowanie("Pobieram konfigurację...");
                     WearWear.zaznaczPliki();
+                    WearWear.pobierzObecnePunktyWSesji();
+                    WearWear.pobierzObecnaTrase();
+                    GPXPunktWear.inicjuj();
 
                     MainActivityWear.activity.zakonczPrzygotowanie();
                     wystartujWatkiProgramu();
@@ -415,16 +435,28 @@ public class AppServiceWear extends Service {
         zakonczWatekCzas();
     }
 
+    private void zabijProces() {
+        Timer timer = new Timer();
+        timer.schedule( new TimerTask() {
+            public void run() {
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+            }
+        }, 1000);
+    }
+
     public void zakonczUsluge() {
         try {
             wystartowany = false;
             widok = StaleWear.WIDOKBRAK;
+            obecnatrasapobrana = false;
             zakonczWatki();
             WearWear.wylaczAPI();
         } catch (Exception e) {
             e.printStackTrace();
         }
         Toast.makeText(getApplicationContext(), KomunikatyWear.KONIECPROGRAMU, Toast.LENGTH_SHORT).show();
+        zabijProces();
     }
 
     private void zapiszPlikMerkatoraDoCache(long[] plikmerkatora) {

@@ -11,11 +11,13 @@ import com.google.android.gms.wearable.Wearable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import trzcina.maplas6.AppServiceWear;
 import trzcina.maplas6.MainActivityWear;
+import trzcina.maplas6.lokalizacjawear.GPXPunktWear;
 import trzcina.maplas6.lokalizacjawear.PlikiGPXWear;
 
 @SuppressWarnings({"PointlessBooleanExpression", "ForLoopReplaceableByForEach"})
@@ -46,7 +48,7 @@ public class WearWear {
     }
 
     public static boolean sprawdzCzyPobracPlik(String nazwa, int wielkosc) {
-        File plik = new File(StaleWear.SCIEZKAMAPLAS + nazwa);
+        File plik = new File(StaleWear.SCIEZKAMAPLAS + nazwa + ".gpx");
         if(plik.isFile()) {
             if(plik.length() == wielkosc) {
                 return false;
@@ -80,17 +82,34 @@ public class WearWear {
         }
     }
 
+    private static void usunZbednePliki(HashSet<String> pliki) {
+        File folder = new File(StaleWear.SCIEZKAMAPLAS);
+        File[] plikiwfolderze = folder.listFiles();
+        if(plikiwfolderze != null) {
+            for (int i = 0; i < plikiwfolderze.length; i++) {
+                if(pliki.contains(plikiwfolderze[i].getName()) == false) {
+                    if(plikiwfolderze[i].getName().endsWith(".gpx")) {
+                        plikiwfolderze[i].delete();
+                    }
+                }
+            }
+        }
+    }
+
     public static void pobierzPliki() {
         WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("FILELIST", null, 3, 1000);
         if(odpowiedz != null) {
             String filelist = new String(odpowiedz.dane);
             String[] pliki = filelist.split(":");
+            HashSet<String> nazwyplikow = new HashSet<>(50);
             for (int i = 0; i < pliki.length; i++) {
                 String[] plik = pliki[i].split("\\^");
                 if(plik.length == 2) {
                     pobierzPlik(plik[0], Integer.valueOf(plik[1]));
+                    nazwyplikow.add(plik[0] + ".gpx");
                 }
             }
+            usunZbednePliki(nazwyplikow);
         }
     }
 
@@ -106,6 +125,42 @@ public class WearWear {
                 }
             }
         }
+    }
+
+    public static void pobierzObecnePunktyWSesji() {
+        WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("OBECNEPUNKTY", null, 3, 1000);
+        if(odpowiedz != null) {
+            String dane = new String(odpowiedz.dane);
+            String[] listapunktow = dane.split(":");
+            for(int i = 0; i < listapunktow.length; i++) {
+                String[] pola = listapunktow[i].split("\\^");
+                if(pola.length == 4) {
+                    GPXPunktWear.dodajPunkt(Float.parseFloat(pola[0]), Float.parseFloat(pola[1]), pola[2], pola[3], 0);
+                }
+            }
+        }
+    }
+
+    public static void pobierzObecnaTrase() {
+        WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("OBECNATRASA", null, 3, 1000);
+        if(odpowiedz != null) {
+            String dane = new String(odpowiedz.dane);
+            String[] listapunktow = dane.split(":");
+            for(int i = 0; i < listapunktow.length; i++) {
+                String[] pola = listapunktow[i].split("\\^");
+                if(pola.length == 2) {
+                    AppServiceWear.service.obecnatrasa.dodajPunkt(Float.parseFloat(pola[0]), Float.parseFloat(pola[1]));
+                }
+                if(pola.length == 1) {
+                    try {
+                        AppServiceWear.service.obecnatrasa.czasstart = Long.parseLong(pola[0]);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        AppServiceWear.service.obecnatrasapobrana = true;
     }
 
     private static String pobierzNode(GoogleApiClient gac) {

@@ -27,6 +27,14 @@ public class RozneWear {
         }
     }
 
+    public static String pobierzPamiec() {
+        Runtime runtime = Runtime.getRuntime();
+        long uzyte = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L;
+        long heapm = runtime.maxMemory() / 1048576L;
+        int procent = (int) ((uzyte / (double)heapm) * 100);
+        return new String("Pamięc: " + uzyte + "MB/" + heapm + "MB" + " (" + procent + "%)");
+    }
+
     //Tworzy katalog
     public static boolean utworzKatalog(String nazwa) {
         File katalog = new File(nazwa);

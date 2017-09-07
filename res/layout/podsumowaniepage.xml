@@ -48,5 +48,16 @@
         android:textSize="30px"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:id="@+id/podgps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/podczastrasy"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="30px"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.wearable.activity.WearableActivity;
@@ -22,10 +23,13 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
+import trzcina.maplas6.lokalizacjawear.GPXTrasaWear;
 import trzcina.maplas6.pomocwear.KomunikatyWear;
 import trzcina.maplas6.pomocwear.PagerAdapterWear;
 import trzcina.maplas6.pomocwear.PaintyWear;
+import trzcina.maplas6.pomocwear.RozneWear;
 import trzcina.maplas6.pomocwear.UprawnieniaWear;
 import trzcina.maplas6.pomocwear.WearWear;
 import trzcina.maplas6.pomocwear.WiadomoscWear;
@@ -56,6 +60,9 @@ public class MainActivityWear extends WearableActivity {
     private TextView poddlugosc;
     private TextView podstart;
     private TextView podczastrasy;
+    private TextView podgps;
+    private LinearLayout czaslinearlayout;
+    public TextView pamiectextview;
 
     public boolean activitywidoczne = true;
 
@@ -107,6 +114,9 @@ public class MainActivityWear extends WearableActivity {
         podstart = (TextView)podsumowaniepage.findViewById(R.id.podstart);
         podczastrasy = (TextView)podsumowaniepage.findViewById(R.id.podczastrasy);
         infomale = (ImageView)mapapage.findViewById(R.id.infomale);
+        czaslinearlayout = (LinearLayout)mapapage.findViewById(R.id.czaslinearlayout);
+        pamiectextview = (TextView)ustawieniapage.findViewById(R.id.pamiectextview);
+        podgps = (TextView)podsumowaniepage.findViewById(R.id.podgps);
     }
 
     public void uzupelnijCzas(final String czas) {
@@ -157,7 +167,7 @@ public class MainActivityWear extends WearableActivity {
                         } else {
                             String daneodpowiedz = new String(wiadomosc.dane);
                             if(daneodpowiedz.startsWith("TRUE")) {
-                                pokazToast("Zapisano: " + ((String)(view.getTag())).getBytes());
+                                pokazToast("Zapisano: " + view.getTag());
                             } else {
                                 pokazToast("Błąd zapisu na telefonie!");
                             }
@@ -176,6 +186,71 @@ public class MainActivityWear extends WearableActivity {
                 AppServiceWear.service.zmienPoziomInfo();
             }
         });
+        czaslinearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppServiceWear.service.zmienKolorInfo();
+                zmienStylTextView();
+            }
+        });
+        mapaczas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppServiceWear.service.zmienKolorInfo();
+                zmienStylTextView();
+            }
+        });
+    }
+
+    private void zmienStylTextView() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                zmienStylJednegoTextView(mapaczas);
+            }
+        });
+    }
+
+    public void wypelnijPodsumowanie() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                GPXTrasaWear obecna = AppServiceWear.service.obecnatrasa;
+                if(obecna != null) {
+                    DateFormat formatczasu = new SimpleDateFormat("HH:mm:ss");
+                    formatczasu.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    poddlugosc.setText("Długość: " + RozneWear.formatujDystans(Math.round(obecna.dlugosctrasy)));
+                    podstart.setText("Od startu: " + RozneWear.formatujDystans(Math.round(obecna.odlegloscodpoczatku)));
+                    podczastrasy.setText("Czas: " + formatczasu.format(System.currentTimeMillis() - obecna.czasstart));
+                    String roznica = "";
+                    if(WearWear.location.getTime() > 0) {
+                        int roznicaint = Math.round((System.currentTimeMillis() - WearWear.location.getTime()) / 1000);
+                        roznica = " (" + roznicaint + "s)";
+                    }
+                    podgps.setText(RozneWear.zaokraglij5((float) WearWear.location.getLongitude()) + " " + RozneWear.zaokraglij5((float) WearWear.location.getLongitude()) + roznica);
+                }
+            }
+        });
+    }
+
+    private void zmienStylJednegoTextView(TextView tv) {
+        int styl = AppServiceWear.service.kolorinfo;
+        if(styl == 0) {
+            tv.setTextColor(Color.WHITE);
+            tv.setBackgroundColor(Color.TRANSPARENT);
+        }
+        if(styl == 1) {
+            tv.setTextColor(Color.RED);
+            tv.setBackgroundColor(Color.TRANSPARENT);
+        }
+        if(styl == 2) {
+            tv.setTextColor(Color.BLACK);
+            tv.setBackgroundColor(Color.TRANSPARENT);
+        }
+        if(styl == 3) {
+            tv.setTextColor(Color.WHITE);
+            tv.setBackgroundColor(Color.BLACK);
+        }
     }
 
     private void ustawImageView(final ImageView im, final int zasob) {
@@ -199,6 +274,7 @@ public class MainActivityWear extends WearableActivity {
         PagerAdapterWear adapter = new PagerAdapterWear();
         pager.setAdapter(adapter);
         pager.setCurrentItem(0);
+        pager.setOnPageChangeListener(adapter);
     }
 
     public void umiescBitmape(final Bitmap bitmapa) {
@@ -333,6 +409,7 @@ public class MainActivityWear extends WearableActivity {
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
         ustawCzasNaPodsumowaniu();
+        wypelnijPodsumowanie();
         podczas.getPaint().setAntiAlias(false);
         podstart.getPaint().setAntiAlias(false);
         poddlugosc.getPaint().setAntiAlias(false);
@@ -344,12 +421,14 @@ public class MainActivityWear extends WearableActivity {
     public void onUpdateAmbient() {
         super.onUpdateAmbient();
         ustawCzasNaPodsumowaniu();
+        wypelnijPodsumowanie();
     }
 
     @Override
     public void onExitAmbient() {
         super.onExitAmbient();
         ustawCzasNaPodsumowaniu();
+        wypelnijPodsumowanie();
         podczas.getPaint().setAntiAlias(true);
         podstart.getPaint().setAntiAlias(true);
         poddlugosc.getPaint().setAntiAlias(true);

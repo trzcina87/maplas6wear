@@ -6,9 +6,11 @@ import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 
 import trzcina.maplas6.AppServiceWear;
+import trzcina.maplas6.MainActivityWear;
 import trzcina.maplas6.lokalizacjawear.GPXPunktWear;
 import trzcina.maplas6.lokalizacjawear.PlikiGPXWear;
 
+@SuppressWarnings("PointlessBooleanExpression")
 public class WearListenerWear implements MessageApi.MessageListener {
 
     private void obsluzOdpowiedz(MessageEvent messageEvent) {
@@ -28,19 +30,23 @@ public class WearListenerWear implements MessageApi.MessageListener {
             WearWear.location.setLatitude(Float.parseFloat(tab[1]));
             WearWear.location.setTime(Long.parseLong(tab[2]));
             AppServiceWear.service.przesunMapeZGPS(WearWear.location);
+            MainActivityWear.activity.wypelnijPodsumowanie();
         }
     }
 
     private void obsluzGPSTRASA(MessageEvent messageEvent) {
         if(messageEvent.getPath().equals("GPSTRASA")) {
-            String tab[] = new String(messageEvent.getData()).split(":");
-            WearWear.location.setLongitude(Float.parseFloat(tab[0]));
-            WearWear.location.setLatitude(Float.parseFloat(tab[1]));
-            WearWear.location.setTime(Long.parseLong(tab[2]));
-            if(AppServiceWear.service.obecnatrasa != null) {
-                AppServiceWear.service.obecnatrasa.dodajPunkt(Float.parseFloat(tab[0]), Float.parseFloat(tab[1]));
+            if(AppServiceWear.service.obecnatrasapobrana == true) {
+                String tab[] = new String(messageEvent.getData()).split(":");
+                WearWear.location.setLongitude(Float.parseFloat(tab[0]));
+                WearWear.location.setLatitude(Float.parseFloat(tab[1]));
+                WearWear.location.setTime(Long.parseLong(tab[2]));
+                if (AppServiceWear.service.obecnatrasa != null) {
+                    AppServiceWear.service.obecnatrasa.dodajPunkt(Float.parseFloat(tab[0]), Float.parseFloat(tab[1]));
+                }
+                AppServiceWear.service.przesunMapeZGPS(WearWear.location);
+                MainActivityWear.activity.wypelnijPodsumowanie();
             }
-            AppServiceWear.service.przesunMapeZGPS(WearWear.location);
         }
     }
 
@@ -55,6 +61,7 @@ public class WearListenerWear implements MessageApi.MessageListener {
     private void obsluzNOWATRASA(MessageEvent messageEvent) {
         if(messageEvent.getPath().equals("NOWATRASA")) {
             AppServiceWear.service.zacznijNowaTrase();
+            MainActivityWear.activity.wypelnijPodsumowanie();
         }
     }
 

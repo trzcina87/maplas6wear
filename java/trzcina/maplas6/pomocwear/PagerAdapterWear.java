@@ -3,11 +3,15 @@ package trzcina.maplas6.pomocwear;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.View;
 
+import trzcina.maplas6.AppServiceWear;
 import trzcina.maplas6.MainActivityWear;
+import trzcina.maplas6.lokalizacjawear.GPXTrasaWear;
 
-public class PagerAdapterWear extends PagerAdapter {
+public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListener {
 
     public PagerAdapterWear() {
         super();
@@ -18,7 +22,6 @@ public class PagerAdapterWear extends PagerAdapter {
     }
 
     public Object instantiateItem(View collection, int position) {
-
         View view = null;
         switch (position) {
             case 0:
@@ -54,5 +57,31 @@ public class PagerAdapterWear extends PagerAdapter {
     @Override
     public Parcelable saveState() {
         return null;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                MainActivityWear.activity.wypelnijPodsumowanie();
+                break;
+            case 3:
+                MainActivityWear.activity.pamiectextview.setText(RozneWear.pobierzPamiec());
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

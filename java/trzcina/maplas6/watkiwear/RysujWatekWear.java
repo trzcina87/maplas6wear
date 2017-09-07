@@ -140,7 +140,6 @@ public class RysujWatekWear extends Thread {
                             int gora = (int) (startcentralnegokaflay + j * tmiparser.rozmiarkafla.y * zoom);
                             canvas.drawBitmap(kafel, new Rect(0, 0, kafel.getWidth(), kafel.getHeight()), new Rect(lewo, gora, lewo + rozmiarxpozoom, gora + rozmiarypozoom), null);
                         } else {
-                            Log.e("WWW", "odswiez = true");
                             odswiez = true;
                         }
                     }
@@ -265,7 +264,7 @@ public class RysujWatekWear extends Thread {
                             canvas.drawText(dystans, AppServiceWear.service.srodekekranu.x + (x - pixelnadsrodkiem.x) * zoom + promienpunktu + 7, AppServiceWear.service.srodekekranu.y + (y - pixelnadsrodkiem.y) * zoom + zarys.height() / 2, PaintyWear.painttekst[AppServiceWear.service.kolorinfo]);
                         }
                     }
-                    if (tmiparser != null) {
+                    /*if (tmiparser != null) {
                         float gpsx = tmiparser.obliczWspolrzednaXDlaPixela(pixelnadsrodkiem.x);
                         float gpsy = tmiparser.obliczWspolrzednaYDlaPixela(pixelnadsrodkiem.y);
                         String dystans = RozneWear.formatujDystans(Math.round(punkt.zmierzDystans(gpsx, gpsy)));
@@ -277,7 +276,7 @@ public class RysujWatekWear extends Thread {
                             }
                             canvas.drawText(dystans, AppServiceWear.service.srodekekranu.x + (x - pixelnadsrodkiem.x) * zoom - promienpunktu - 7 - zarys.width(), AppServiceWear.service.srodekekranu.y + (y - pixelnadsrodkiem.y) * zoom + zarys.height() / 2, PaintyWear.painttekst[AppServiceWear.service.kolorinfo]);
                         }
-                    }
+                    }*/
                 }
             }
         }
