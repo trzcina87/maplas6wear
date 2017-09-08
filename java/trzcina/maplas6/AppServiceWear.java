@@ -170,6 +170,8 @@ public class AppServiceWear extends Service {
                 GoogleApiClient gac = WearWear.ustawApi();
                 if(gac != null) {
 
+                    WearWear.wyslijSTARTGPS();
+
                     MainActivityWear.activity.ustawProgressPrzygotowanie(2);
                     MainActivityWear.activity.ustawInfoPrzygotowanie("Pobieram pliki...");
                     WearWear.pobierzPliki();
@@ -203,9 +205,10 @@ public class AppServiceWear extends Service {
                     MainActivityWear.activity.ustawProgressPrzygotowanie(8);
                     MainActivityWear.activity.ustawInfoPrzygotowanie("Pobieram konfigurację...");
                     WearWear.zaznaczPliki();
+
+                    GPXPunktWear.inicjuj();
                     WearWear.pobierzObecnePunktyWSesji();
                     WearWear.pobierzObecnaTrase();
-                    GPXPunktWear.inicjuj();
 
                     MainActivityWear.activity.zakonczPrzygotowanie();
                     wystartujWatkiProgramu();

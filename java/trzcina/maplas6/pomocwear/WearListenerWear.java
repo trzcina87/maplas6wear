@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
+
+import java.util.Arrays;
 
 import trzcina.maplas6.AppServiceWear;
 import trzcina.maplas6.MainActivityWear;
@@ -13,6 +16,14 @@ import trzcina.maplas6.lokalizacjawear.PlikiGPXWear;
 @SuppressWarnings("PointlessBooleanExpression")
 public class WearListenerWear implements MessageApi.MessageListener {
 
+    private static int sufitZInta(int a, int dzielnik) {
+        if(a % dzielnik == 0) {
+            return a / dzielnik;
+        } else {
+            return (a / dzielnik) + 1;
+        }
+    }
+
     private void obsluzOdpowiedz(MessageEvent messageEvent) {
         String tab[] = messageEvent.getPath().split(":");
         if(tab.length == 2) {
@@ -20,6 +31,23 @@ public class WearListenerWear implements MessageApi.MessageListener {
             int wiadomoscid = Integer.parseInt(tab[1]);
             WiadomoscWear wiadomosc = new WiadomoscWear(wiadomoscid, nazwa, messageEvent.getData());
             WearWear.wiadomosci[wiadomoscid].odpowiedz = wiadomosc;
+        }
+        if(tab.length == 4) {
+            String nazwa = tab[0];
+            int wiadomoscid = Integer.parseInt(tab[1]);
+            int dlugoscwiadomsci = Integer.parseInt(tab[2]);
+            int segment = Integer.parseInt(tab[3]);
+            synchronized (MainActivityWear.activity) {
+                if(WearWear.wiadomosci[wiadomoscid].tmpodp == null) {
+                    WearWear.wiadomosci[wiadomoscid].tmpodp = new byte[dlugoscwiadomsci];
+                }
+                System.arraycopy(messageEvent.getData(), 0, WearWear.wiadomosci[wiadomoscid].tmpodp, segment * StaleWear.GACDATALIIT, messageEvent.getData().length);
+                WearWear.wiadomosci[wiadomoscid].ilesegmentowskopiowanych = WearWear.wiadomosci[wiadomoscid].ilesegmentowskopiowanych + 1;
+                if(WearWear.wiadomosci[wiadomoscid].ilesegmentowskopiowanych == sufitZInta(dlugoscwiadomsci, StaleWear.GACDATALIIT)) {
+                    WiadomoscWear wiadomosc = new WiadomoscWear(wiadomoscid, nazwa, WearWear.wiadomosci[wiadomoscid].tmpodp);
+                    WearWear.wiadomosci[wiadomoscid].odpowiedz = wiadomosc;
+                }
+            }
         }
     }
 
@@ -31,6 +59,7 @@ public class WearListenerWear implements MessageApi.MessageListener {
             WearWear.location.setTime(Long.parseLong(tab[2]));
             AppServiceWear.service.przesunMapeZGPS(WearWear.location);
             MainActivityWear.activity.wypelnijPodsumowanie(false);
+            MainActivityWear.activity.wypelnijPodsumowanieNaWidokuMapy();
         }
     }
 
@@ -46,6 +75,7 @@ public class WearListenerWear implements MessageApi.MessageListener {
                 }
                 AppServiceWear.service.przesunMapeZGPS(WearWear.location);
                 MainActivityWear.activity.wypelnijPodsumowanie(false);
+                MainActivityWear.activity.wypelnijPodsumowanieNaWidokuMapy();
             }
         }
     }
@@ -62,6 +92,7 @@ public class WearListenerWear implements MessageApi.MessageListener {
         if(messageEvent.getPath().equals("NOWATRASA")) {
             AppServiceWear.service.zacznijNowaTrase();
             MainActivityWear.activity.wypelnijPodsumowanie(false);
+            MainActivityWear.activity.wypelnijPodsumowanieNaWidokuMapy();
         }
     }
 

@@ -60,5 +60,6 @@ public class StaleWear {
 
     public static String FOLDERMAPYWEAR = "/sdcard/MAPY/";
     public static int GACCONNTIMEOUT = 5;
+    public static int GACDATALIIT = 90000;
 }
 

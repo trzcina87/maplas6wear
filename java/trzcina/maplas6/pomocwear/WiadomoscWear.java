@@ -10,12 +10,16 @@ public class WiadomoscWear {
     public String nazwa;
     public byte[] dane;
     public WiadomoscWear odpowiedz;
+    public byte[] tmpodp;
+    public volatile int ilesegmentowskopiowanych;
 
     public WiadomoscWear(int id, String nazwa, byte[] dane) {
         this.id = id;
         this.nazwa = nazwa;
         this.dane = dane;
         odpowiedz = null;
+        tmpodp = null;
+        ilesegmentowskopiowanych = 0;
     }
 
     public void wyslij() {

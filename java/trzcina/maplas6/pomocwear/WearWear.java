@@ -1,7 +1,6 @@
 package trzcina.maplas6.pomocwear;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.Node;
@@ -47,6 +46,18 @@ public class WearWear {
         return null;
     }
 
+    public static void wyslijSTOPGPS() {
+        if(WearWear.gac != null) {
+            Wearable.MessageApi.sendMessage(WearWear.gac, WearWear.telefon, "STOPGPS", null);
+        }
+    }
+
+    public static void wyslijSTARTGPS() {
+        if(WearWear.gac != null) {
+            Wearable.MessageApi.sendMessage(WearWear.gac, WearWear.telefon, "STARTGPS", null);
+        }
+    }
+
     public static boolean sprawdzCzyPobracPlik(String nazwa, int wielkosc) {
         File plik = new File(StaleWear.SCIEZKAMAPLAS + nazwa + ".gpx");
         if(plik.isFile()) {
@@ -61,7 +72,7 @@ public class WearWear {
     }
 
     private static void pobierzPlikZTelefonu(String nazwa) {
-        WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("FILEGET_" + nazwa, null, 3, 1000);
+        WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("FILEGET_" + nazwa, null, 1, 10000);
         if(odpowiedz != null) {
             File plik = new File(StaleWear.SCIEZKAMAPLAS + nazwa + ".gpx");
             try {
@@ -136,6 +147,9 @@ public class WearWear {
                 String[] pola = listapunktow[i].split("\\^");
                 if(pola.length == 4) {
                     GPXPunktWear.dodajPunkt(Float.parseFloat(pola[0]), Float.parseFloat(pola[1]), pola[2], pola[3], 0);
+                }
+                if(pola.length == 3) {
+                    GPXPunktWear.dodajPunkt(Float.parseFloat(pola[0]), Float.parseFloat(pola[1]), pola[2], null, 0);
                 }
             }
         }

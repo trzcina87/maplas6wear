@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import trzcina.maplas6.MainActivityWear;
 import trzcina.maplas6.pomocwear.StaleWear;
 
 public class PlikiGPXWear {
@@ -102,6 +103,7 @@ public class PlikiGPXWear {
 
             //Dla kazdego katalogu w katalogu z mapami tworzymy atlas
             for(int i = 0; i < plikiwkatalogu.length; i++) {
+                MainActivityWear.activity.ustawInfoPrzygotowanie("Wczytuje: " + plikiwkatalogu[i].getName());
                 PlikGPXWear plikgpx = new PlikGPXWear(plikiwkatalogu[i].getAbsolutePath());
                 plikgpx.naprawJesliTrzeba();
                 plikgpx.parsuj();

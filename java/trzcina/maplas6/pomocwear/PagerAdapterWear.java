@@ -69,6 +69,7 @@ public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListen
         switch (position) {
             case 0:
                 MainActivityWear.activity.ustawCzasNaMapie();
+                MainActivityWear.activity.wypelnijPodsumowanieNaWidokuMapy();
                 break;
             case 1:
                 break;
@@ -77,6 +78,7 @@ public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListen
                 break;
             case 3:
                 MainActivityWear.activity.wypelnijPamiec();
+                MainActivityWear.activity.wypelnijBaterie();
                 break;
         }
     }

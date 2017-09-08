@@ -1,5 +1,8 @@
 package trzcina.maplas6.pomocwear;
 
+import android.content.Context;
+import android.os.BatteryManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 import trzcina.maplas6.BuildConfig;
+import trzcina.maplas6.MainActivityWear;
 
 public class RozneWear {
 
@@ -33,6 +37,12 @@ public class RozneWear {
         long heapm = runtime.maxMemory() / 1048576L;
         int procent = (int) ((uzyte / (double)heapm) * 100);
         return new String("Pamięc: " + uzyte + "MB/" + heapm + "MB" + " (" + procent + "%)");
+    }
+
+    public static String pobierzBaterie() {
+        BatteryManager bm = (BatteryManager) MainActivityWear.activity.getSystemService(Context.BATTERY_SERVICE);
+        int poziom = bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        return new String("Bateria: " + poziom + "%");
     }
 
     //Tworzy katalog
@@ -157,6 +167,12 @@ public class RozneWear {
         double val = liczba * 100000;
         long vall = Math.round(val);
         return vall / 100000F;
+    }
+
+    public static float zaokraglij4(float liczba) {
+        double val = liczba * 10000;
+        long vall = Math.round(val);
+        return vall / 10000F;
     }
 
     public static long pomnoz4(double liczba) {
