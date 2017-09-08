@@ -429,6 +429,7 @@ public class MainActivityWear extends WearableActivity {
         ustawWidocznoscWidoku(powieksz, View.VISIBLE);
         ustawWidocznoscWidoku(infomale, View.VISIBLE);
         ustawWidocznoscWidoku(trasainfo, View.VISIBLE);
+        ustawWidocznoscWidoku(mapaczas, View.VISIBLE);
     }
 
 
