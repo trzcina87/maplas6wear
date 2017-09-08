@@ -72,7 +72,7 @@ public class WearWear {
     }
 
     private static void pobierzPlikZTelefonu(String nazwa) {
-        WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("FILEGET_" + nazwa, null, 1, 10000);
+        WiadomoscWear odpowiedz = wyslijWiadomoscICzekajNaOdpowiedz("FILEGET_" + nazwa, null, 1, 30000);
         if(odpowiedz != null) {
             File plik = new File(StaleWear.SCIEZKAMAPLAS + nazwa + ".gpx");
             try {
