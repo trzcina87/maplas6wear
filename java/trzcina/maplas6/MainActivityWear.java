@@ -44,6 +44,7 @@ public class MainActivityWear extends WearableActivity {
     private LayoutInflater inflater;
     public RelativeLayout mapapage;
     public LinearLayout dodaj1page;
+    public LinearLayout dodaj2page;
     public RelativeLayout podsumowaniepage;
     public LinearLayout ustawieniapage;
 
@@ -93,6 +94,7 @@ public class MainActivityWear extends WearableActivity {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mapapage = znajdzRelativeLayout(R.layout.mapapage);
         dodaj1page = znajdzLinearLayout(R.layout.dodaj1page);
+        dodaj2page = znajdzLinearLayout(R.layout.dodaj2page);
         podsumowaniepage = znajdzRelativeLayout(R.layout.podsumowaniepage);
         ustawieniapage = znajdzLinearLayout(R.layout.ustawieniapage);
     }
@@ -207,6 +209,10 @@ public class MainActivityWear extends WearableActivity {
         int[] ikony = {R.id.im1, R.id.im2, R.id.im3, R.id.im4, R.id.im5, R.id.im6, R.id.im7, R.id.im8, R.id.im9};
         for(int i = 0; i < ikony.length; i++) {
             dodaj1page.findViewById(ikony[i]).setOnClickListener(zapisz);
+        }
+        int[] ikony2 = {R.id.im11, R.id.im12, R.id.im13, R.id.im14, R.id.im15, R.id.im16, R.id.im17, R.id.im18, R.id.im19};
+        for(int i = 0; i < ikony2.length; i++) {
+            dodaj2page.findViewById(ikony2[i]).setOnClickListener(zapisz);
         }
         infomale.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -506,7 +512,7 @@ public class MainActivityWear extends WearableActivity {
         super.onEnterAmbient(ambientDetails);
         WearWear.wyslijSTOPGPS();
         wrocdowidoku = pager.getCurrentItem();
-        if(wrocdowidoku == 3) {
+        if(wrocdowidoku == 4) {
             wrocdowidoku = 0;
         }
         ustawCzasNaPodsumowaniu();

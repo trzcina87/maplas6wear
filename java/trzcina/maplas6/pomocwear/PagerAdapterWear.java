@@ -18,7 +18,7 @@ public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListen
     }
 
     public int getCount() {
-        return 4;
+        return 5;
     }
 
     public Object instantiateItem(View collection, int position) {
@@ -34,6 +34,9 @@ public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListen
                 view = MainActivityWear.activity.podsumowaniepage;
                 break;
             case 3:
+                view = MainActivityWear.activity.dodaj2page;
+                break;
+            case 4:
                 view = MainActivityWear.activity.ustawieniapage;
                 break;
         }
@@ -77,6 +80,8 @@ public class PagerAdapterWear extends PagerAdapter implements OnPageChangeListen
                 MainActivityWear.activity.wypelnijPodsumowanie(false);
                 break;
             case 3:
+                break;
+            case 4:
                 MainActivityWear.activity.wypelnijPamiec();
                 MainActivityWear.activity.wypelnijBaterie();
                 break;

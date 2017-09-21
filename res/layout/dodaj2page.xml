@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/im1"
+            android:id="@+id/im11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -21,11 +21,11 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Prawdziwek"
-            android:src="@mipmap/prawdziwek" />
+            android:tag="Poziomka"
+            android:src="@mipmap/poziomka" />
 
         <ImageView
-            android:id="@+id/im2"
+            android:id="@+id/im12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -33,11 +33,11 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Rydz"
-            android:src="@mipmap/rydz" />
+            android:tag="Jagoda"
+            android:src="@mipmap/jagoda" />
 
         <ImageView
-            android:id="@+id/im3"
+            android:id="@+id/im13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -45,8 +45,8 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Kania"
-            android:src="@mipmap/kania" />
+            android:tag="Zurawina"
+            android:src="@mipmap/zurawina" />
 
     </LinearLayout>
 
@@ -58,7 +58,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/im4"
+            android:id="@+id/im14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -66,11 +66,11 @@
             android:minHeight="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Kurka"
-            android:src="@mipmap/kurka" />
+            android:tag="Jerzyna"
+            android:src="@mipmap/jerzyna" />
 
         <ImageView
-            android:id="@+id/im5"
+            android:id="@+id/im15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -78,11 +78,11 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Kowal"
-            android:src="@mipmap/kowal" />
+            android:tag="Parking"
+            android:src="@mipmap/parking" />
 
         <ImageView
-            android:id="@+id/im6"
+            android:id="@+id/im16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -90,8 +90,8 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Piaskowiec"
-            android:src="@mipmap/piaskowiec" />
+            android:tag="Atrakcja"
+            android:src="@mipmap/atrakcja" />
 
     </LinearLayout>
 
@@ -103,7 +103,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/im7"
+            android:id="@+id/im17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -111,11 +111,11 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Czarny lepek"
-            android:src="@mipmap/czarnylepek" />
+            android:tag="Pomnik"
+            android:src="@mipmap/pomnik" />
 
         <ImageView
-            android:id="@+id/im8"
+            android:id="@+id/im18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -123,11 +123,11 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Maslak"
-            android:src="@mipmap/maslak" />
+            android:tag="Widok"
+            android:src="@mipmap/widok" />
 
         <ImageView
-            android:id="@+id/im9"
+            android:id="@+id/im19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxHeight="106px"
@@ -135,8 +135,8 @@
             android:maxWidth="106px"
             android:minWidth="106px"
             android:adjustViewBounds="true"
-            android:tag="Gaska"
-            android:src="@mipmap/gaska" />
+            android:tag="Punkt"
+            android:src="@mipmap/znacznik2" />
 
     </LinearLayout>
 

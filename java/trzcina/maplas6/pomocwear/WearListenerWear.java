@@ -1,5 +1,6 @@
 package trzcina.maplas6.pomocwear;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.wearable.MessageApi;
@@ -71,6 +72,9 @@ public class WearListenerWear implements MessageApi.MessageListener {
                 WearWear.location.setLatitude(Float.parseFloat(tab[1]));
                 WearWear.location.setTime(Long.parseLong(tab[2]));
                 if (AppServiceWear.service.obecnatrasa != null) {
+                    if(AppServiceWear.service.obecnatrasa.iloscpunktow == 0) {
+                        AppServiceWear.service.zaproponujZmianeMapy(new Location(WearWear.location));
+                    }
                     AppServiceWear.service.obecnatrasa.dodajPunkt(Float.parseFloat(tab[0]), Float.parseFloat(tab[1]));
                 }
                 AppServiceWear.service.przesunMapeZGPS(WearWear.location);

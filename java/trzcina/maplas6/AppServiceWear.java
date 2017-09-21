@@ -2,6 +2,7 @@ package trzcina.maplas6;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.location.Location;
@@ -379,6 +380,16 @@ public class AppServiceWear extends Service {
             }
         }
         odswiezUI();
+    }
+
+    public void zaproponujZmianeMapy(Location location) {
+        AtlasWear propozycja = AtlasyWear.szukajNajlepszejMapy(location);
+        if(propozycja != null) {
+            atlas = propozycja;
+            MainActivityWear.activity.pokazToast(atlas.nazwa);
+            zaczytajOpcje(false, 0, 0);
+            odswiezUI();
+        }
     }
 
     public void wczytajKolejnaMape() {
